@@ -29,7 +29,6 @@ while True:
                     print("девять")
                 elif a == 10:
                     print("десять")
-                    exit()
                 elif a == 11:
                     print("одиннадцать")
                 elif a == 12:
