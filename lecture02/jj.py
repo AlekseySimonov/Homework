@@ -42,6 +42,7 @@ while True:
                 print("восемнадцать")
             elif a == 19:
                 print("девятнадцать")
+        
         elif 20 <= a <= 99:
             a = str(a)
             if int(a[0]) == 2:
