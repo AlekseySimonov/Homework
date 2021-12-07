@@ -1,4 +1,4 @@
-import sys, os
+import sys
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout, QFileDialog
 from PyQt5.QtCore import QUrl, QDir
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent, QMediaPlaylist
@@ -34,7 +34,7 @@ class AudioPlayer(QWidget):
 
         self.player = QMediaPlayer()
 
-
+        self.player.error.connect(self._errorHandle)
 
     def volumeUp(self):
         currentVolume = self.player.volume()
@@ -52,15 +52,15 @@ class AudioPlayer(QWidget):
         findFile = QFileDialog.getOpenFileName(self)
 
         if findFile != '':
-            content = QMediaContent(findFile)
-
-            self.player.setMedia(content)
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(str(findFile))))
             self.player.play()
 
 
         else:
             return
 
+    def _errorHandle(selfsself,error):
+        print('ERROR',error)
 
 if __name__ == '__main__':
 
@@ -69,6 +69,5 @@ if __name__ == '__main__':
     App = AudioPlayer()
     App.show()
     sys.exit(app.exec_())
-
 
 
