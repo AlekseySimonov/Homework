@@ -52,7 +52,7 @@ class AudioPlayer(QWidget):
         findFile = QFileDialog.getOpenFileName(self)
 
         if findFile != '':
-            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(str(findFile))))
+            self.player.setMedia(QMediaContent(QUrl.fromLocalFile(findFile[0])))
             self.player.play()
 
 
