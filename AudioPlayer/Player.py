@@ -2,63 +2,63 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtMultimedia import *
-from PyQt5.QtMultimediaWidgets import *
-
 
 class AudioPlayer(QWidget):
-
+    # инициализация плеера
     def __init__(self):
-        super().__init__()
-        self.resize(400, 300)
 
+        # создание окна
+        super().__init__()
+        self.resize(300, 300)
         place = self.frameGeometry()
         centre = QDesktopWidget().availableGeometry().center()
         place.moveCenter(centre)
         self.move(place.topLeft())
         self.setWindowTitle("Audio Player")
 
-        self.videowidget = QVideoWidget()
+        # вызов класса QMediaPlayer
         self.player = QMediaPlayer()
 
+        # отображение положения объектов
         self.layout = QVBoxLayout()
         self.layout.addStretch(1)
         self.setLayout(self.layout)
 
+        # время продолжительности
         self.time = QHBoxLayout()
-
         self.TimeLabel = QLabel('00:00')
         self.name = QLabel('')
+        self.time.addWidget(self.TimeLabel)
+        self.time.addWidget(self.name)
+        self.layout.addLayout(self.time)
 
+        # слайдер
         self.sldPosition = QSlider(Qt.Horizontal)
         self.sldPosition.setMinimum(0)
         self.sldPosition.sliderMoved[int].connect(self.position)
         self.layout.addWidget(self.sldPosition)
+        self.sldPosition.setEnabled(False)
 
-        self.time.addWidget(self.TimeLabel)
-        self.time.addWidget(self.name)
-
-        self.layout.addLayout(self.time)
-
+        # соединение позиции времени проигрывания с используемыми объектами
         self.player.positionChanged.connect(self.sldPosition.setValue)
-
         self.player.durationChanged.connect(self.duration)
         self.player.durationChanged.connect(self.durationTime)
 
-        self.sldPosition.setEnabled(False)
-
+        # создание кнопки play
         self.btnplay = QPushButton(" ▶️", clicked=self.play)
         self.layout.addWidget(self.btnplay)
         self.btnplay.setFixedSize(40, 40)
         self.btnplay.setEnabled(False)
 
+        # создание кноки pause
         self.btnpause = QPushButton("||", clicked=self.pause)
         self.layout.addWidget(self.btnpause)
         self.btnpause.setFixedSize(40, 40)
         self.btnpause.setEnabled(False)
 
+        # создание кнопок увеличения и уменьшения громкости
         volumeControl = QHBoxLayout()
         self.layout.addLayout(volumeControl)
-
         btnVolumeUp = QPushButton('+', clicked=self.volumeUp)
         btnVolumeDown = QPushButton('-', clicked=self.volumeDown)
         butVolumeMute = QPushButton('Mute', clicked=self.volumeMute)
@@ -66,12 +66,12 @@ class AudioPlayer(QWidget):
         volumeControl.addWidget(butVolumeMute)
         volumeControl.addWidget(btnVolumeDown)
 
+        # создание кнопки открытия файла(open)
         findAudio = QHBoxLayout()
         self.layout.addLayout(findAudio)
-
         btnOpenFile = QPushButton('Open', clicked=self.OpenAudioFile)
         findAudio.addWidget(btnOpenFile)
-
+        # отображение какой-либо ошибки
         self.player.error.connect(self._errorHandle)
 
     def position(self, value):
@@ -126,9 +126,8 @@ class AudioPlayer(QWidget):
 
     def _errorHandle(self, error):
         print('ERROR', error, self.player.errorString())
-
+# запуск плеера
 if __name__ == '__main__':
-
     app = QApplication(sys.argv)
     App = AudioPlayer()
     App.show()
